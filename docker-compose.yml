@@ -1,0 +1,13 @@
+services:
+  backend:
+    build: ./backend/CarRecommendation.Api
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__MongoDb=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"

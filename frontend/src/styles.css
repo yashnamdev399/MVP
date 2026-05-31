@@ -1,0 +1,62 @@
+/* Global styles */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  background-image:
+    /* Subtle road/lane dashes pattern */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(148, 163, 184, 0.04) 40px,
+      rgba(148, 163, 184, 0.04) 42px
+    ),
+    /* Faint diagonal tire-track lines */
+    repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 80px,
+      rgba(100, 116, 139, 0.03) 80px,
+      rgba(100, 116, 139, 0.03) 81px
+    ),
+    /* Soft speedometer-arc circles */
+    radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(37, 99, 235, 0.025) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(100, 116, 139, 0.015) 0%, transparent 70%);
+}
+
+/* Subtle car-themed SVG pattern overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3C!-- Steering wheel --%3E%3Ccircle cx='30' cy='30' r='12' fill='none' stroke='%23334155' stroke-width='2'/%3E%3Ccircle cx='30' cy='30' r='4' fill='none' stroke='%23334155' stroke-width='1.5'/%3E%3Cline x1='30' y1='18' x2='30' y2='24' stroke='%23334155' stroke-width='1.5'/%3E%3Cline x1='30' y1='36' x2='30' y2='42' stroke='%23334155' stroke-width='1.5'/%3E%3Cline x1='18' y1='30' x2='24' y2='30' stroke='%23334155' stroke-width='1.5'/%3E%3Cline x1='36' y1='30' x2='42' y2='30' stroke='%23334155' stroke-width='1.5'/%3E%3C!-- Speedometer --%3E%3Cpath d='M 80 95 A 20 20 0 0 1 80 55' fill='none' stroke='%23334155' stroke-width='1.5'/%3E%3Cline x1='80' y1='75' x2='90' y2='65' stroke='%23334155' stroke-width='1.5'/%3E%3C!-- Road marks --%3E%3Crect x='55' y='10' width='3' height='10' rx='1.5' fill='%23334155'/%3E%3Crect x='55' y='28' width='3' height='10' rx='1.5' fill='%23334155'/%3E%3C/svg%3E");
+  background-size: 250px 250px;
+}
+
+/* Ensure content sits above the pattern */
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Smooth page transitions */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeSlideIn 0.35s ease-out;
+}

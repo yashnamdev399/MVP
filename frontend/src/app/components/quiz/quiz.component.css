@@ -1,0 +1,132 @@
+/* Step animation */
+.step-content {
+  animation: fadeSlideIn 0.3s ease-out;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Range slider custom */
+.form-range::-webkit-slider-thumb {
+  cursor: pointer;
+}
+
+/* Card hover */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Score ring */
+.score-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.score-ring.excellent { background: linear-gradient(135deg, #22c55e, #16a34a); }
+.score-ring.good { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.score-ring.fair { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.score-ring.low { background: linear-gradient(135deg, #6b7280, #4b5563); }
+
+/* Hero header */
+.quiz-hero {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+  color: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.quiz-hero h1 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.quiz-hero p {
+  opacity: 0.85;
+  margin: 0;
+}
+
+/* Result card rank indicator */
+.rank-indicator {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.rank-1 { background: #f59e0b; }
+.rank-2 { background: #94a3b8; }
+.rank-3 { background: #b45309; }
+
+/* Spec grid */
+.spec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  padding: 0.4rem 0;
+}
+
+.spec-item .spec-icon {
+  font-size: 1rem;
+}
+
+/* Lifestyle / priority option cards */
+.option-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #fff;
+}
+
+.option-card:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.option-card.selected {
+  border-color: #2563eb;
+  background: #dbeafe;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.option-card .option-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.option-card .option-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}

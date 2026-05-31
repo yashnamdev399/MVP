@@ -1,0 +1,283 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <!-- Hero Header -->
+      <div class="quiz-hero">
+        <h1>🚗 Car Matchmaker</h1>
+        <p>Answer 4 quick questions. We'll find your perfect car.</p>
+      </div>
+
+      <!-- Progress bar -->
+      @if (currentStep <= totalSteps) {
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="progress flex-grow-1" style="height: 8px; border-radius: 4px;">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              [style.width.%]="(currentStep / totalSteps) * 100"
+              [style.background]="'linear-gradient(90deg, #2563eb, #7c3aed)'"
+              [attr.aria-valuenow]="currentStep"
+              aria-valuemin="0"
+              [attr.aria-valuemax]="totalSteps"
+            ></div>
+          </div>
+          <span class="text-muted small fw-semibold">{{ currentStep }}/{{ totalSteps }}</span>
+        </div>
+      }
+
+      <!-- Quiz Card -->
+      @if (currentStep <= totalSteps) {
+        <div class="card shadow-sm border-0 mt-3">
+          <div class="card-body p-4 step-content">
+
+            <!-- Step 1: Budget -->
+            @if (currentStep === 1) {
+              <h5 class="card-title fw-bold mb-1">💰 What's your maximum budget?</h5>
+              <p class="text-muted small mb-3">Slide or tap a quick-pick below</p>
+
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <span class="text-muted small">₹6L</span>
+                <input
+                  type="range"
+                  class="form-range flex-grow-1"
+                  [min]="6"
+                  [max]="20"
+                  [step]="1"
+                  [(ngModel)]="budgetLakhs"
+                  aria-label="Budget in lakhs"
+                />
+                <span class="text-muted small">₹20L</span>
+              </div>
+
+              <div class="text-center mb-3">
+                <span class="badge bg-primary fs-5 px-4 py-2 rounded-pill">₹{{ budgetLakhs }} Lakh</span>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2 justify-content-center">
+                @for (preset of budgetPresets; track preset) {
+                  <button
+                    class="btn btn-sm rounded-pill px-3"
+                    [class]="budgetLakhs === preset ? 'btn-primary' : 'btn-outline-primary'"
+                    (click)="setBudget(preset)"
+                  >
+                    ₹{{ preset }}L
+                  </button>
+                }
+              </div>
+            }
+
+            <!-- Step 2: Seating -->
+            @if (currentStep === 2) {
+              <h5 class="card-title fw-bold mb-1">🪑 How many seats do you need?</h5>
+              <p class="text-muted small mb-3">Choose the minimum seating capacity</p>
+
+              <div class="d-flex flex-wrap gap-3 justify-content-center">
+                @for (seats of seatOptions; track seats) {
+                  <button
+                    class="btn btn-lg px-5 py-3 rounded-3"
+                    [class]="selectedSeats === seats ? 'btn-primary shadow' : 'btn-outline-secondary'"
+                    (click)="setSeats(seats)"
+                  >
+                    <span class="d-block fs-3 mb-1">{{ seats }}</span>
+                    <small>seats</small>
+                  </button>
+                }
+              </div>
+            }
+
+            <!-- Step 3: Lifestyle -->
+            @if (currentStep === 3) {
+              <h5 class="card-title fw-bold mb-1">🛣️ What's your driving lifestyle?</h5>
+              <p class="text-muted small mb-3">Pick the one that best describes your daily drive</p>
+
+              <div class="row g-3">
+                @for (opt of lifestyleOptions; track opt.value) {
+                  <div class="col-6">
+                    <div
+                      class="option-card"
+                      [class.selected]="selectedLifestyle === opt.value"
+                      (click)="setLifestyle(opt.value)"
+                    >
+                      <span class="option-icon">{{ opt.icon }}</span>
+                      <span class="option-label">{{ opt.label }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Step 4: Dealbreaker -->
+            @if (currentStep === 4) {
+              <h5 class="card-title fw-bold mb-1">⚡ Your ultimate dealbreaker?</h5>
+              <p class="text-muted small mb-3">What matters most when choosing a car?</p>
+
+              <div class="row g-3">
+                @for (opt of priorityOptions; track opt.value) {
+                  <div class="col-6">
+                    <div
+                      class="option-card"
+                      [class.selected]="selectedPriority === opt.value"
+                      (click)="setPriority(opt.value)"
+                    >
+                      <span class="option-icon">{{ opt.icon }}</span>
+                      <span class="option-label">{{ opt.label }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between mt-4 pt-2 border-top">
+              @if (currentStep > 1) {
+                <button class="btn btn-outline-secondary rounded-pill px-4" (click)="prevStep()">← Back</button>
+              } @else {
+                <span></span>
+              }
+
+              @if (currentStep < totalSteps) {
+                <button
+                  class="btn btn-primary rounded-pill px-4"
+                  [disabled]="!canProceed()"
+                  (click)="nextStep()"
+                >
+                  Next →
+                </button>
+              }
+              @if (currentStep === totalSteps) {
+                <button
+                  class="btn btn-success rounded-pill px-4 fw-semibold"
+                  [disabled]="!canProceed() || loading"
+                  (click)="submit()"
+                >
+                  @if (loading) {
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    Finding...
+                  } @else {
+                    Find My Cars 🚀
+                  }
+                </button>
+              }
+            </div>
+
+          </div>
+        </div>
+      }
+
+      <!-- Results Screen -->
+      @if (currentStep === 5) {
+        <div class="step-content">
+          <div class="text-center mb-4">
+            <h2 class="fw-bold">🎯 Your Top Picks</h2>
+            <p class="text-muted">Ranked by how well they match your preferences</p>
+          </div>
+
+          @if (results.length === 0) {
+            <div class="card shadow-sm border-0 text-center p-5">
+              <div class="fs-1 mb-3">😕</div>
+              <h4 class="fw-bold mb-2">We couldn't find an exact match</h4>
+              <p class="text-muted mb-4">
+                Your filters were too strict — for example, 7-seater options are limited under ₹8 Lakh.
+                <br>Try increasing your budget or reducing the seat requirement.
+              </p>
+              <div>
+                <button class="btn btn-primary btn-lg rounded-pill px-5" (click)="restart()">
+                  🔄 Retake Quiz
+                </button>
+              </div>
+            </div>
+          }
+
+          @if (results.length > 0) {
+          <div class="row g-4 mb-4">
+            @for (result of results; track result.car.id; let i = $index) {
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 overflow-hidden">
+
+                  <!-- Top banner: Best Match or spacer for alignment -->
+                  @if (i === 0) {
+                    <div class="card-header text-center fw-semibold border-0 text-white"
+                         style="background: linear-gradient(90deg, #f59e0b, #d97706);">
+                      🏆 Best Match
+                    </div>
+                  } @else {
+                    <div class="card-header bg-light border-0 text-center py-2">
+                      <small class="text-muted fw-semibold">#{{ i + 1 }} Pick</small>
+                    </div>
+                  }
+
+                  <div class="card-body">
+                    <!-- Score + Rank row -->
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                      <span class="rank-indicator rank-{{ i + 1 }}">{{ i + 1 }}</span>
+                      <div class="score-ring" [ngClass]="getScoreClass(result.matchScore)">
+                        {{ result.matchScore }}%
+                      </div>
+                    </div>
+
+                    <h6 class="text-muted mb-0">{{ result.car.make }}</h6>
+                    <h4 class="fw-bold text-primary mb-3">{{ result.car.model }}</h4>
+
+                    <!-- Spec grid -->
+                    <div class="spec-grid mb-3">
+                      <div class="spec-item">
+                        <span class="spec-icon">💰</span>
+                        <span>{{ formatPrice(result.car.price) }}</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-icon">⛽</span>
+                        <span>{{ result.car.fuelType }}</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-icon">📏</span>
+                        <span>{{ result.car.mileage }} km/l</span>
+                      </div>
+                      <div class="spec-item">
+                        <span class="spec-icon">🪑</span>
+                        <span>{{ result.car.seatingCapacity }} seats</span>
+                      </div>
+                    </div>
+
+                    <!-- Safety stars -->
+                    <div class="mb-3">
+                      <small class="text-muted d-block mb-1">Safety Rating</small>
+                      <span class="text-warning fs-5">{{ getStars(result.car.safetyRating) }}</span>
+                    </div>
+
+                    <!-- Match reason -->
+                    <div class="rounded-3 p-2 mb-3" style="background: #f0fdf4;">
+                      <small class="text-success fw-semibold">
+                        ✓ {{ result.matchReason }}
+                      </small>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="d-flex flex-wrap gap-1">
+                      @for (attr of result.car.primaryAttributes; track attr) {
+                        <span class="badge rounded-pill bg-light text-dark border">{{ attr }}</span>
+                      }
+                    </div>
+                  </div>
+
+                  <div class="card-footer bg-transparent text-center text-muted small border-0">
+                    {{ result.car.bodyType }}
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Retake (only when results exist) -->
+          <div class="text-center">
+            <button class="btn btn-outline-primary btn-lg rounded-pill px-5" (click)="restart()">
+              🔄 Start Over
+            </button>
+          </div>
+          }
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
