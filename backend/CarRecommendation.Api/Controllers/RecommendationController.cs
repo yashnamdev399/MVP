@@ -5,7 +5,7 @@ using CarRecommendation.Api.Services;
 namespace CarRecommendation.Api.Controllers;
 
 [ApiController]
-[Route("api/cars")]
+[Route("cars")]
 public class RecommendationController(RecommendationService service) : ControllerBase
 {
     [HttpPost("recommend")]
