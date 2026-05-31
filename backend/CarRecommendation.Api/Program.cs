@@ -17,15 +17,23 @@ builder.Services.AddSingleton(sp =>
 builder.Services.AddSingleton<RecommendationService>();
 
 builder.Services.AddControllers();
-builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
-    p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowNetlify", policy =>
+    {
+        policy.WithOrigins("https://mvpproj.netlify.app") 
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+    
 
 var app = builder.Build();
 
-// Seed data if collection is empty
+
 await SeedData.InitializeAsync(app.Services);
 
-app.UseCors();
+app.UseCors("AllowNetlify");
 app.MapControllers();
 
 app.Run();
